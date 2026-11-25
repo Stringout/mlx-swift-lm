@@ -66,7 +66,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/Stringout/mlx-swift",
-            revision: "7666db2f3ba85e13000832acfc4cadb2e4a8de0f"),
+            revision: "d56f0d797f5824632400d4979d5502e1a5fb7530"),
         // 602.0.0 floor: swift.org publishes signed prebuilt swift-syntax artifacts only for
         // >= 602 tags on current toolchains; a 600.x/601.x resolution falls back to the full
         // source compile of swift-syntax.
