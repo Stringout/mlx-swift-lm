@@ -1,5 +1,3 @@
-// Copyright © 2026 Apple Inc.
-
 // Synthetic tests for DFlash2 speculative decoding over the MLXVLM Qwen 3.5
 // target. Drafter, context-cache, mask, conv and selector tests are ported from
 // ml-explore/mlx-swift-lm#607 (spokvulcan). Tests that compare speculative output

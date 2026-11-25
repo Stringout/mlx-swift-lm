@@ -1,5 +1,3 @@
-// Copyright © 2026 Apple Inc.
-
 // DFlash2 block drafter (https://inco.ai/blog/dflash2/), ported from
 // ml-explore/mlx-swift-lm#607 (spokvulcan) and the reference
 // `dflash/model_mlx.py` (https://github.com/z-lab/dflash).

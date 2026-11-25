@@ -1,5 +1,3 @@
-// Copyright © 2026 Apple Inc.
-
 // DFlash2 throughput bench over a local target and drafter, on prerendered
 // prompts. Plain decoding is `TokenIterator`, as an ordinary generate runs it.
 //

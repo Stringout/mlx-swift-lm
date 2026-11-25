@@ -1,5 +1,3 @@
-// Copyright © 2026 Apple Inc.
-
 // A GPU clock hold: one SIMD group kept busy on its own command queue, so the
 // GPU does not clock down between the short bursts of one-token decode.
 

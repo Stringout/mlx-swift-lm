@@ -1,5 +1,3 @@
-// Copyright © 2026 Apple Inc.
-
 // What a DFlash2 round costs on this host, and whether this GPU's verify pass
 // and commit agree with plain decoding. Measured once per drafter attach.
 

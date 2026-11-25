@@ -1,5 +1,3 @@
-// Copyright © 2026 Apple Inc.
-
 // Attention rows for a DFlash2 verify pass, ported from ml-explore/mlx-swift-lm#607
 // (spokvulcan). The pass writes at a position that may still be lazy and commits
 // once the accept count is known.

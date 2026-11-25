@@ -1,5 +1,3 @@
-// Copyright © 2026 Apple Inc.
-
 // Real-weights DFlash2 correctness checks, opt-in: set DFLASH2_TARGET_DIR (an
 // MLX Qwen3.8 VLM checkpoint), DFLASH2_DRAFTER_DIR (a DFlash2 drafter) and
 // DFLASH2_TOKENS_DIR (prerendered `{label, phase, tokenIds}` prompts). Through

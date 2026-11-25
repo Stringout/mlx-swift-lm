@@ -1,5 +1,3 @@
-// Copyright © 2026 Apple Inc.
-
 // The Qwen 3.5 VLM language model as a DFlash2 target. The verify pass follows
 // the MLXLLM Qwen 3.5 target of ml-explore/mlx-swift-lm#607 (spokvulcan), on
 // this model's compiled decode segments and M-RoPE.

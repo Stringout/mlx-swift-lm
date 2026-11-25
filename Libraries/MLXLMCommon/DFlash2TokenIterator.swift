@@ -1,5 +1,3 @@
-// Copyright © 2026 Apple Inc.
-
 // DFlash2 speculative token iterator. The round pipeline, recurrent commit and
 // rewind are ported from ml-explore/mlx-swift-lm#607 (spokvulcan); acceptance is
 // sample-and-match rather than the reference's rejection sampling.

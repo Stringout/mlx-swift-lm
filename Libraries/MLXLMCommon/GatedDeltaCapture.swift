@@ -1,5 +1,3 @@
-// Copyright © 2026 Apple Inc.
-
 // Gated-delta capture and masked replay for DFlash2 verify passes, ported from
 // ml-explore/mlx-swift-lm#607 (spokvulcan). The reference rolls back the same way
 // (`_GDNStateCapture.rollback` in z-lab/dflash `dflash/model_mlx.py`).
