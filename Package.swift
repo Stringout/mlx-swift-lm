@@ -64,7 +64,9 @@ let package = Package(
         .default(enabledTraits: ["FoundationModelsIntegration"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/ml-explore/mlx-swift", .upToNextMinor(from: "0.33.0")),
+        .package(
+            url: "https://github.com/Stringout/mlx-swift",
+            revision: "7666db2f3ba85e13000832acfc4cadb2e4a8de0f"),
         // 602.0.0 floor: swift.org publishes signed prebuilt swift-syntax artifacts only for
         // >= 602 tags on current toolchains; a 600.x/601.x resolution falls back to the full
         // source compile of swift-syntax.
@@ -153,6 +155,19 @@ let package = Package(
             ],
             path: "Libraries/IntegrationTestHelpers",
             exclude: ["README.md"]
+        ),
+
+        // DFlash2 throughput over a local target and drafter. Local-only.
+        .executableTarget(
+            name: "DFlash2Bench",
+            dependencies: [
+                "MLXLMCommon",
+                "MLXVLM",
+                "BenchmarkHelpers",
+                .product(name: "MLX", package: "mlx-swift"),
+                .product(name: "MLXNN", package: "mlx-swift"),
+            ],
+            path: "Benchmarks/DFlash2Bench"
         ),
 
         // Scripted tokenizers and models

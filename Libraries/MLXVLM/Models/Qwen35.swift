@@ -1155,7 +1155,7 @@ public enum Qwen35Language {
 
     open class Model: Module {
         @ModuleInfo(key: "embed_tokens") var embedTokens: Embedding
-        @ModuleInfo(key: "layers") fileprivate var layers: [DecoderLayer]
+        @ModuleInfo(key: "layers") var layers: [DecoderLayer]
         @ModuleInfo(key: "norm") var norm: RMSNorm
 
         let ssmIdx: Int?
@@ -1201,7 +1201,8 @@ public enum Qwen35Language {
             cache: [KVCache?]? = nil,
             positionIds: MLXArray? = nil,
             applyFinalNorm: Bool = true,
-            checkpointAfter: Int? = nil
+            checkpointAfter: Int? = nil,
+            layerOutput: ((Int, MLXArray) -> Void)? = nil
         ) -> MLXArray {
             forward(
                 inputs,
@@ -1210,6 +1211,7 @@ public enum Qwen35Language {
                 positionIds: positionIds,
                 applyFinalNorm: applyFinalNorm,
                 checkpointAfter: checkpointAfter,
+                layerOutput: layerOutput,
                 useCompiledDecode: true)
         }
 
@@ -1220,9 +1222,10 @@ public enum Qwen35Language {
             positionIds: MLXArray? = nil,
             applyFinalNorm: Bool = true,
             checkpointAfter: Int? = nil,
+            layerOutput: ((Int, MLXArray) -> Void)? = nil,
             useCompiledDecode: Bool = true
         ) -> MLXArray {
-            if useCompiledDecode, type(of: self) == Model.self, !training,
+            if useCompiledDecode, layerOutput == nil, type(of: self) == Model.self, !training,
                 inputsEmbeds == nil, applyFinalNorm, checkpointAfter == nil,
                 inputs.dim(0) == 1, inputs.dim(1) == 1, let cache,
                 let step = decodeStep(inputs, cache, positionIds: positionIds)
@@ -1297,6 +1300,7 @@ public enum Qwen35Language {
                         positionIds: positionIds,
                         checkpointAfter: checkpointAfter)
                 }
+                layerOutput?(index, hiddenStates)
             }
 
             return applyFinalNorm ? norm(hiddenStates) : hiddenStates
@@ -1543,13 +1547,16 @@ public enum Qwen35Language {
             }
 
             let emitDrafterState = state[mtpEmitFlagKey] ?? false
+            let targetLayerIds = emitDrafterState ? (state[mtpTargetLayerIdsKey] ?? []) : []
+            var targetLayerOutputs: [Int: MLXArray] = [:]
             let preNormHidden = model(
                 inputs,
                 inputsEmbeds: inputsEmbeds,
                 cache: cache,
                 positionIds: positionIds,
                 applyFinalNorm: !emitDrafterState,
-                checkpointAfter: state[mtpCacheCheckpointIndexKey]
+                checkpointAfter: state[mtpCacheCheckpointIndexKey],
+                layerOutput: targetLayerIds.isEmpty ? nil : { targetLayerOutputs[$0] = $1 }
             )
             let hiddenStates = emitDrafterState ? model.norm(preNormHidden) : preNormHidden
 
@@ -1565,7 +1572,10 @@ public enum Qwen35Language {
             }
 
             if emitDrafterState {
-                state[mtpLastHiddenStatesKey] = hiddenStates
+                state[mtpLastHiddenStatesKey] =
+                    targetLayerIds.isEmpty
+                    ? hiddenStates
+                    : concatenated(targetLayerIds.map { targetLayerOutputs[$0]! }, axis: -1)
                 state[mtpSharedKVStatesKey] = qwen35VLMSharedKVState(
                     cache: cache, fullAttentionIndex: model.faIdx)
                 state[mtpSharedKVOffsetsKey] = qwen35VLMSharedKVOffsets(
